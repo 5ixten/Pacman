@@ -15,10 +15,17 @@ public class Pacman : Actor
     public override void Create(Scene scene)
     {
         direction = -1;
-        originalSpeed = 60.0f;
-        speed = originalSpeed;
         base.Create(scene);
         sprite.TextureRect = new IntRect(0, 0, 18, 18);
+        scene.LoseHealth += OnLoseHealth;
+        
+        originalSpeed = 60;
+        speed = originalSpeed;
+    }
+
+    private void OnLoseHealth(Scene scene, int amount)
+    {
+        Reset();
     }
 
     public override void Update(Scene scene, float deltaTime)
@@ -44,5 +51,10 @@ public class Pacman : Actor
         }
         if (!IsFree(scene, direction)) moving = false;
         return direction;
+    }
+    
+    public override void Destroy(Scene scene) {
+        base.Destroy(scene);
+        scene.LoseHealth -= OnLoseHealth;
     }
 }

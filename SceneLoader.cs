@@ -38,6 +38,8 @@ public class SceneLoader
                 }
             }
         }
+        
+        scene.Spawn(new GUI());
 
         currentScene = nextScene;
         nextScene = "";

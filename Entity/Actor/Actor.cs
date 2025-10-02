@@ -10,7 +10,7 @@ public abstract class Actor : Entity
     protected float speed;
     protected int direction;
     protected bool moving;
-    protected Vector2f originalPosition;
+    protected Vector2f? originalPosition;
     protected float originalSpeed;
     
     protected bool IsAligned =>
@@ -47,12 +47,18 @@ public abstract class Actor : Entity
     {
         _wasAligned = false;
         speed = originalSpeed;
-        Position = originalPosition;
+        Position = (Vector2f)originalPosition;
     }
 
     public override void Update(Scene scene, float deltaTime)
     {
         base.Update(scene, deltaTime);
+
+        if (originalPosition == null)
+        {
+            originalPosition = Position;
+        }
+        
         if (IsAligned)
         {
             // If just got aligned

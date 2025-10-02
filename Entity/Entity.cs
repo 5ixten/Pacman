@@ -31,7 +31,7 @@ public abstract class Entity
         sprite.Texture = scene.Assets.LoadTexture(_textureName);
     }
     
-    public void Destroy(Scene scene)
+    public virtual void Destroy(Scene scene)
     {
         
     }
@@ -44,7 +44,7 @@ public abstract class Entity
         }
     }
     
-    public void Render(RenderTarget target)
+    public virtual void Render(RenderTarget target)
     {
         target.Draw(sprite);
     }
