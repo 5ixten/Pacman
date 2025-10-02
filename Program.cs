@@ -24,7 +24,7 @@ class Program {
                 
                 scene.UpdateAll(deltaTime);
 
-                window.Clear(new Color(223, 246, 245));
+                window.Clear(new Color(71, 44, 15));
                 
                 scene.RenderAll(window);
 

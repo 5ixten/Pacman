@@ -12,11 +12,12 @@ public class Ghost : Actor
     public override void Create(Scene scene)
     {
         direction = -1;
-        originalSpeed = 60.0f;
-        speed = originalSpeed;
         moving = true;
         base.Create(scene);
         sprite.TextureRect = new IntRect(36, 0, 18, 18);
+        
+        originalSpeed = 60;
+        speed = originalSpeed;
     }
 
     protected override int PickDirection(Scene scene)
@@ -31,5 +32,12 @@ public class Ghost : Actor
         
         int r = new Random().Next(0, validMoves.Count);
         return validMoves[r];
+    }
+    
+    protected override void CollideWith(Scene scene, Entity e) {
+        if (e is Pacman) {
+            scene.PublishLoseHealth(1);
+            Reset();
+        }
     }
 }

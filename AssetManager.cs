@@ -35,7 +35,7 @@ public class AssetManager
             return foundFont;
         }
         
-        string filePath = $"assets/{name}.png";
+        string filePath = $"assets/{name}.ttf";
         Font font = new Font(filePath);
         fonts.Add(name, font);
         
