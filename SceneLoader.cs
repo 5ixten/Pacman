@@ -38,8 +38,12 @@ public class SceneLoader
                 }
             }
         }
-        
-        scene.Spawn(new GUI());
+
+        if (!scene.FindByType<GUI>(out _))
+        {
+            Console.WriteLine("Creating new scene");
+            scene.Spawn(new GUI());
+        }
 
         currentScene = nextScene;
         nextScene = "";
