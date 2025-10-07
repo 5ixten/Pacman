@@ -43,16 +43,19 @@ public abstract class Actor : Entity
         }
     }
 
-    public void Reset()
+    public virtual void Reset()
     {
         _wasAligned = false;
         speed = originalSpeed;
         Position = (Vector2f)originalPosition;
+        _spawnDelay = 1;
     }
 
     public override void Update(Scene scene, float deltaTime)
     {
+        if (!scene.Started) return;
         base.Update(scene, deltaTime);
+        if (_spawnDelay > 0) return;
 
         if (originalPosition == null)
         {

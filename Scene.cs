@@ -1,7 +1,6 @@
 ﻿using SFML.Graphics;
 
 namespace Pacman;
-public delegate void ValueChangedEvent(Scene scene, int value);
 
 public sealed class Scene
 { 
@@ -9,32 +8,32 @@ public sealed class Scene
 
     public readonly SceneLoader Loader;
     public readonly AssetManager Assets;
+    public readonly EventHandler EventHandler;
 
-    public event ValueChangedEvent GainScore;
-    public event ValueChangedEvent LoseHealth;
-    private int _scoreGained;
-    private int _healthLost;
+    public bool Started = false;
+    public int Highscore = 0;
     
-    public Scene(SceneLoader loader,  AssetManager assets)
+    public Scene(SceneLoader loader,  AssetManager assets, EventHandler eventHandler)
     {
         _entities = new();
         Loader = loader;
         Assets = assets;
+        EventHandler = eventHandler;
     }
-    
-    public void PublishGainScore(int amount) => _scoreGained += amount;
-    public void PublishLoseHealth(int amount) => _healthLost -= amount;
     
     public void Spawn(Entity entity)
     {
         _entities.Add(entity);
         entity.Create(this);
+        _entities = _entities.OrderBy(e => e.ZIndex).ToList();
     }
 
     public void Clear()
     {
         for (int i = _entities.Count - 1; i >= 0; i--) {
             Entity entity = _entities[i];
+            if (entity.DontDestroyOnLoad) continue;
+            
             _entities.RemoveAt(i);
             entity.Destroy(this);
         }
@@ -48,17 +47,8 @@ public sealed class Scene
             entity.Update(this, deltaTime);
         }
         
-        if (_scoreGained != 0) {
-            GainScore?.Invoke(this, _scoreGained);
-            _scoreGained = 0;
-        }
+        EventHandler.Update(this);
         
-        if (_healthLost != 0) {
-            LoseHealth?.Invoke(this, _healthLost);
-            _healthLost = 0;
-        }
-        
-     
         for (int i = _entities.Count - 1; i >= 0; i--)
         {
             var entity = _entities[i];
